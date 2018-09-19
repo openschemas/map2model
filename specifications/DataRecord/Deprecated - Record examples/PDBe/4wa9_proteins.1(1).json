@@ -1,0 +1,44 @@
+{
+    "@context": "http://schema.org",
+    "@type": "BiologicalEntity",
+    "biologicalType": "protein",
+    "@id": "http://identifiers.org/uniprot:P00519",
+    "identifier": "P00519",
+    "name": "Tyrosine-protein kinase ABL1",
+    "distribution": "http://www.ebi.ac.uk/pdbe/entry/pdb/4wa9/fasta?entity=1",
+    "representation": "GSSPNYDKWEMERTDITMKHKLGGGQYGEVYEGVWKKYSLTVAVKTLKEDTMEVEEFLKEAAVMKEIKHPNLVQLLGVCTREPPFYIITEFMTYGNLLDYLRECNRQEVNAVVLLYMATQISSAMEYLEKKNFIHRDLAARNCLVGENHLVKVADFGLSRLMTGDTYTAHAGAKFPIKWTAPESLAYNKFSIKSDVWAFGVLLWEIATYGMSPYPGIDLSQVYELLEKDYRMERPEGCPEKVYELMRACWQWNPSDRPSFAEIHQAFETMFQESSISDEVEKELGK",
+    "taxon": "http://identifiers.org/taxonomy:9606",
+    "url": "http://www.ebi.ac.uk/pdbe/entry/pdb/4wa9/protein/1",
+    "crossReference": {
+        "@type": "ProperyValue",
+        "name": "Gene",
+        "value": ["JTK7", "ABL1", "ABL"]
+    },
+    "biocoordinates": {
+        "@type": "PropertyValue",
+        "minValue": 246,
+        "maxValue": 512
+    },
+    "isBasisFor": [{
+            "@type": "BiologicalEntity",
+            "@id": "http://identifiers.org/pdb:4wa9"
+        }
+    ],
+    "additionalProperty": [{
+            "@type": "PropertyValue",
+            "name": "chain",
+            "value": [
+                "A",
+                "B"
+            ]
+        }, {
+            "@type": "PropertyValue",
+            "name": "sequenceLength",
+            "value": "286"
+        }, {
+            "@type": "PropertyValue",
+            "name": "coverage",
+            "value": "24%"
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "@type": "DataCatalog",
+    "@id": "http://pdbe.org",
+    "name": "Protein Data Bank in Europe",
+    "identifier": [
+        "MIR:00100037",
+        "biodbcore-000322"
+    ],
+    "alternameName": "PDBe",
+    "dateModified": "2017-06-07",
+    "fileFormat": "mmCIF",
+    "provider": "",
+    "dataset": {
+        "@type": "Dataset",
+        "name": "Protein Structure Data",
+        "description": "Latest release of PDBe structure data",
+        "url": "",
+        "citation": "http://identifiers.org/pubmed:24288376",
+        "license": "",
+        "fileFormat": "mmCIF (.cif)",
+        "distribution": {
+            "@type": "DataDownload",
+            "datePublished": "2017-06-07"            
+        },
+        "keywords": [
+            "protein",
+            "structure",
+            "pdbe",
+            "ligands",
+            "NMR"
+        ],
+        "includedInDataCatalog": "http://pdbe.org",
+        "creator": {
+            "@type": "Organization",
+            "name": "Protein Data Bank in Europe"
+        }
+    },
+    "url": "http://pdbe.org",
+    "sourceOrganization": "European Bioinformatics Institute (EBI)",
+    "publication": "",
+    "description": "PDBe is the European resource for the collection, organisation and dissemination of data on biological macromolecular structures.",
+    "keywords": [
+        "protein",
+        "structure",
+        "pdbe",
+        "ligands",
+        "NMR"
+    ],
+    "license": ""
+}

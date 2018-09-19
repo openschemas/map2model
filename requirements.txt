@@ -1,0 +1,10 @@
+Pygments==2.2.0
+PyJWT==1.5.3
+python-frontmatter==0.4.2
+rdflib==4.2.2
+rdflib-jsonld==0.4.0
+requests==2.18.1
+ruamel.std.argparse==0.8.1
+ruamel.yaml==0.15.31
+ruamel.yaml.cmd==0.4.2
+ruamel.yaml.convert==0.3.0
