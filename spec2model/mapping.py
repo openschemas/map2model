@@ -290,7 +290,7 @@ class MappingParser:
 
         # Generate values in advance
         name = self.metadata['name']
-        gh_base = 'https://github.com/BioSchemas/specifications/tree/master'
+        gh_base = 'https://github.com/openschemas/specifications/tree/master'
         use_cases_url = self.metadata['use_cases_url']
 
         description = {}
@@ -303,7 +303,7 @@ class MappingParser:
         # Github Future Links
         description['gh_folder'] = '%s/%s' % (gh_base, name)
         description['gh_examples']= '%s/%s/examples' % (gh_base, name)
-        description['gh_tasks'] = 'https://github.com/BioSchemas/bioschemas/labels/type%3A%20'+ name
+        description['gh_tasks'] = 'https://github.com/openschemas/specifications/labels/type%3A%20'+ name
 
         description['edit_url']='%s/%s/specification.html' % (gh_base, name)
         description['use_cases_url'] = self.check_url(use_cases_url)

@@ -2,11 +2,13 @@ import spec2model.config_manager as yml_manager
 from spec2model.validator import FolderValidator
 import os
 
+here = os.path.abspath(os.path.dirname(__file__))
+
 class FolderDigger:
 
     yml_config = ''
 
-    def __init__(self, config_file_path='spec2model/configuration.yml'):
+    def __init__(self, config_file_path='%s/configuration.yml' % here):
         self.specs_list = {}
         self.config_file_path = config_file_path
         self.yml_config = yml_manager.YamlIO()

@@ -6,6 +6,8 @@ import os
 import sys
 from io import BytesIO
 
+here = os.path.abspath(os.path.dirname(__file__))
+
 class FrontMatterParser:
     md_files_path = ''
     bsc_parser = ''
@@ -13,7 +15,7 @@ class FrontMatterParser:
 
     def __init__(self, input_folder='specifictions', 
                        output_folder='docs/spec_files/',
-                       config_file_path='spec2map/configuration.yml'):
+                       config_file_path='%s/configuration.yml' % here):
 
         '''defaults here are intended for running in spec2map repository. 
            Use via run.py to edit for your needs.
@@ -103,7 +105,6 @@ class FrontMatterParser:
             with open(os.path.join(spec_exp_dir, "README.md"), "w") as example_file:
                 example_file.write("## %s coding examples. \n" % spec_name)
                 example_file.write("Folder that stores JSON-LD, RDFa or microdata examples.\n")
-                example_file.write(">Examples will be added in a future map2model release.\n")            
                 print("%s file structure created." % spec_name)
 
         # Either way, return the specification directory
@@ -144,11 +145,11 @@ class FrontMatterParser:
             readme.write("\n# Description \n")
             readme.write("%s \n" % description)
             readme.write("# Links \n")
-            readme.write("- [Specification](http://bioschemas.org/bsc_specs/%s/specification/)\n" % name)
+            readme.write("- [Specification](http://openschemas.github.io/specifications/%s/)\n" % name)
             readme.write("- [Specification source](specification.html)\n")
             readme.write("- [Coding Examples](%s)\n" % spec_dict['gh_examples'])
             readme.write("- [GitHUb Issues](%s)\n" % spec_dict['gh_tasks'])
-            readme.write("> These files were generated using [map2model](https://github.com/BioSchemas/map2model) Python Module.")
+            readme.write("> These files were generated using [map2model](https://github.com/openschemas/map2model) Python Module.")
         
     def parse_front_matter(self):
 
