@@ -1,6 +1,12 @@
-# Bioschemas.org map2model
+# OpenSchemas map2model
 
-**map2model** is a Python module that facilitates [Bioschemas Groups](http://bioschemas.org/groups/) in the specification definition process.
+![docs/img/openbases.png](docs/img/openbases.png)
+
+This version of **map2model** is a simplified version of Python module 
+derived from the [Bioschemas Groups](http://bioschemas.org/groups/). It will help you
+to create an OpenSchema intended for submission to [schemas.org](schemas.org), with
+a focus on tech / hpc specifications that might not fall cleanly under strictly 
+biological sciences, but support open science.
 
 **map2model** retrieves properties and Bioschemas fields (Marginality, Cardinality and Controlled Vocabularies) from Bioschemas mapping files (in the [specifications](specifications)) folder, then classifies properties into two groups:
 1. **Extended properties:** Properties that are part of the extended schema.org Type.
@@ -25,10 +31,10 @@ Before starting, please ensure you have the following installed:
 
 ### Executing map2model
 
-Clone the **map2model** repository: ```git clone https://github.com/BioSchemas/map2model.git```
+Clone the **map2model** repository: ```git clone https://github.com/OpenSchemas/map2model.git```
 
 ```bash
-git clone https://github.com/BioSchemas/map2model.git
+git clone https://github.com/OpenSchemas/map2model.git
 cd map2model
 ```
 
@@ -59,34 +65,7 @@ While your specification is a draft, the name of the folder will start with an u
 
 When you are finished with your spec, run the script to generate files in *map2model > docs > spec_files*. Check that your folder is present! Next, you will want to open a pull request (PR) to update the repository.
 
-### Updating Specifications
+Coming soon, we will have full instructions for:
 
-1. Fork [Bioschemas specification repository](https://github.com/BioSchemas/specifications)
-1. Clone your fork to your local computer.
-1. If you added a new specification, copy the entire folder from *map2model > docs > spec_files* into the top level of the local copy of **specifications**.
-1. If you changed an existing specification copy the *specification.html* file from the specification subfolder in *map2model > docs > spec_files* into the appropriate specification folder in the local **specifications** repo.
-1. Check everything is OK. If it is, commit your changes. Then push to the GitHub hosted version of your fork.
-1. Make a **Pull Request** of your specifications repository fork:
-      - Go to the GitHub webpage and choose your fork of the main **specifications** repository.
-      - Click the button called *Create new pull request*
-      - Click the green button titled *Create pull request*
-      - Write a simple summary of your changes in the *Write* window.
-      - Click the *Create pull request* button
-1. Your changes will now be manually checked to ensure they do not conflict with existing content.
-1. Wait until your **Pull Request** is merged into [Bioschemas Web](https://github.com/BioSchemas/bioschemas.github.io)
-      > To preserve [Bioschemas Web Page](http://bioschemas.org), changes to [bioschemas.github.io repository](https://github.com/BioSchemas/bioschemas.github.io) will be issued by Bioschemas Web Master.
-1. Check your changes at [Specifications Bioschemas Web section](htt://bioschemas.org/bsc_specs)
-
-### Create a Specification
-
-Your workflow is going to be simple. You will:
-
- 1. generate tab separated value files from templates provided on Google Drive
- 2. add the files to a new specification folder here
- 3. commit to the Github repository you have forked and cloned, and issue a pull request akin to [Updating Specifications](#updating-specifications)
-
-copied the mapping template files for Authors, Specification Info, Bioschemas Fields, and Schema.org Mapping into the folder. If you haven't created your tempates yet, you can generate them [from] this template](https://docs.google.com/spreadsheets/d/1Ty69GRzc3xuvfpEIRHjfl_9L25MNFfrKXCdwrpxYslo/edit?usp=sharing) and simply export each sheet as .tsv (tab separated values). This means that four files should go into your `NameOfMySpec` folder: 
-    - `NameOfMySpec_Mapping.tsv`
-    - `NameOfMySpec_BioschemasFields.tsv`
-    - `NameOfMySpec_Specification.tsv`
-    - `NameOfMySpec_Authors.tsv`
+ - updating specifications
+ - creating new specifications
