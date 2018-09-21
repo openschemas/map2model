@@ -134,8 +134,6 @@ class FrontMatterParser:
                            'version_date']
 
         # Fields specifically for openschemas template
-        metadata['permalink'] = "specifications/%s" % (name)
-        metadata['redirect_from'] = "%s/%s" % (self.reponame, name)
         info['full_example'] = "%s/tree/master/%s/examples/" % (self.repo, name)
 
         if not isinstance(skip_fields, list):
