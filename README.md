@@ -73,12 +73,25 @@ If you want to add a specification, add an entry to [spec2model/configuration.ym
   parent_type: CreativeWork
 ```
 
-Importantly, the following expectations will be tested:
+We provide a [Google Drive sheets template](https://docs.google.com/spreadsheets/d/1Ty69GRzc3xuvfpEIRHjfl_9L25MNFfrKXCdwrpxYslo/edit?usp=sharing) that you can use to do this, and simply export each sheet as .tsv (tab separated values). This means that four files should go into your `_NameOfMySpec` folder. While your specification is a draft, the name of the folder will start with an underscore (`_NameOfMySpec`). When you are done, remove the underscore (`NameOfMySpec`).
 
-  1. you have created a `_NameOfMySpec` folder under [specifications](specifications)
-  2. you have created your mapping files and added them to this folder. We provide a [Google Drive sheets template](https://docs.google.com/spreadsheets/d/1Ty69GRzc3xuvfpEIRHjfl_9L25MNFfrKXCdwrpxYslo/edit?usp=sharing) that you can use to do this, and simply export each sheet as .tsv (tab separated values). This means that four files should go into your `_NameOfMySpec` folder. For detailed instruction, see [the Specification Creation](#create-a-specification) section below.
-  3. You will be able to run validation functions over these files to check their quality.
+When you are finished with your spec, run the script to generate files in *map2model > docs > spec_files*. Check that your folder is present! 
 
-While your specification is a draft, the name of the folder will start with an underscore (`_NameOfMySpec`). When you are done, remove the underscore (`NameOfMySpec`).
+```
+tree docs/spec_files
+├── Container
+│   ├── Container.html
+│   ├── Container.yml
+│   ├── examples
+│   │   └── README.md
+│   └── README.md
+└── DataCatalog
+    ├── DataCatalog.html
+    ├── DataCatalog.yml
+    ├── examples
+    │   └── README.md
+    └── README.md
+```
 
-When you are finished with your spec, run the script to generate files in *map2model > docs > spec_files*. Check that your folder is present! Next, you will want to open a pull request (PR) to update the repository.
+Next, you will want to open a pull request (PR) to update the [specifications]() repository
+(details coming soon).
