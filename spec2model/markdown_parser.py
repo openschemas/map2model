@@ -253,9 +253,9 @@ class FrontMatterParser:
             # Write as output a yml and html file
             output_name =  os.path.join(spec_dir, '%s' % spec_name)
             with open('%s.yml' % output_name, 'w') as outfile:
-                outfile.write(template)
-            with open('%s.html' % output_name, 'w') as outfile:
                 outfile.write(content)
+            with open('%s.html' % output_name, 'w') as outfile:
+                outfile.write(template)
 
             print('%s MarkDown file generated.' % post.metadata['name'])
 
