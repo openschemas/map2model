@@ -1,6 +1,8 @@
 from spec2model.file_manager import FolderDigger
 from spec2model.mapping import MappingParser
 from spec2model.validator import FolderValidator
+from datetime import datetime
+import time
 import frontmatter
 import os
 import sys
@@ -118,7 +120,8 @@ class FrontMatterParser:
         metadata = {}
         post = frontmatter.Post('')
         name = spec_dict['name']
-        info = {}
+        version_date = datetime.now().strftime('%Y%m%dT%H%M%S')
+        info = {'version_date': version_date}
 
         # Skip over set of pre-defined fields
         if not skip_fields:
@@ -131,7 +134,7 @@ class FrontMatterParser:
                            'subtitle',
                            'title',
                            'version',
-                           'version_date']
+                           "version_date"]
 
         # Fields specifically for openschemas template
         info['full_example'] = "%s/tree/master/%s/examples/" % (self.repo, name)

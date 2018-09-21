@@ -126,7 +126,8 @@ def get_expected_types(expected_types):
     list_of_types = []
 
     for expected_type in expected_types:
-        list_of_types.append(expected_type.strip())
+        if expected_type not in ['', None]:
+            list_of_types.append(expected_type.strip())
 
     return list_of_types
 
