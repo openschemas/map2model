@@ -248,7 +248,7 @@ class FrontMatterParser:
             # Write the final markdown frontmatter to <NAME>.html from template.html            
             with open('%s/templates/template.html' % here, 'r') as tfile:
                 template = tfile.read()
-            template.replace('{{MAP2SPEC_FRONTEND_MATTER}}', content)
+            template = template.replace('{{MAP2SPEC_FRONTEND_MATTER}}', content)
 
             # Write as output a yml and html file
             output_name =  os.path.join(spec_dir, '%s' % spec_name)
