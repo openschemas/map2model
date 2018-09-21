@@ -20,6 +20,10 @@ def get_parser():
                          help='folder to write output specification subfolders', 
                          type=str, default=None)
 
+    parser.add_argument("--template", dest='template', 
+                         help='template for openschemas.github.io. Should not need change.', 
+                         type=str, default=None)
+
     return parser
 
 
@@ -39,16 +43,13 @@ def main():
     if not folder:
         folder = 'specifications'
 
-    outfolder = args.outfolder
-    if not outfolder:
-        outfolder = 'docs/spec_files'
-
+    # Inputs and outputs, defaults to docs/spec_files
+    outfolder = args.outfolder or 'docs/spec_files'
     outfolder = os.path.abspath(outfolder)
     folder = os.path.abspath(folder)
 
-    config = args.config
-    if not config:
-        config = 'spec2model/configuration.yml'
+    config = args.config or 'spec2model/configuration.yml'
+    template = args.template
         
     # Output folder we may need to make
     if not os.path.exists(outfolder):
@@ -64,11 +65,11 @@ def main():
             print('Error, %s not found.' % path)
             sys.exit(1)
 
-
-    bsc_md_parser = md_parser.FrontMatterParser(input_folder=folder,
-                                                output_folder=outfolder,
-                                                config_file_path=config)
-    bsc_md_parser.parse_front_matter()
+    spec_parser = md_parser.FrontMatterParser(input_folder=folder,
+                                              output_folder=outfolder,
+                                              config_file_path=config,
+                                              template=template)
+    spec_parser.parse_front_matter()
     
 
 if __name__ == '__main__':

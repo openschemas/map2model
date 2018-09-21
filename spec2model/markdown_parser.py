@@ -9,37 +9,81 @@ from io import BytesIO
 here = os.path.abspath(os.path.dirname(__file__))
 
 class FrontMatterParser:
-    md_files_path = ''
-    bsc_parser = ''
-    bsc_spec_list = ''
+    '''the FrontEndMatterParser takes an input folder of specification
+       subfolders, and a configuration.yml file, and generates a set of
+       specification folders, each with a <Specification>.html file that
+       can be contributed as a specification to the openschemas.github.io
+       repository.
+    '''
 
-    def __init__(self, input_folder='specifictions', 
-                       output_folder='docs/spec_files/',
-                       config_file_path='%s/configuration.yml' % here):
+    def __init__(self, input_folder='specifications', 
+                       output_folder = None,
+                       config_file_path= None,
+                       template = None,
+                       repo = None):
 
         '''defaults here are intended for running in spec2map repository. 
            Use via run.py to edit for your needs.
+
+           Parameters
+           ==========
+           input_folder: a folder of specification subfolders, each with .tsv
+           output_folder: base to write matching output subfolders
+           config_file_path: path to configuration.yml
+           template.html is the template for openschemas.github.io
+           repo: github <org>/<repository> for specifications 
+
         '''
-        self.__check_input_folder(input_folder)
-        self.md_files_path = output_folder
+        if config_file_path is None:
+            config_file_path = '%s/configuration.yml' % here
+
+        if template is None:
+            template = '%s/templates/template.html' % here
+
+        self.input_folder = self._check_input_folder(input_folder)
+        self.template = self._check_input_folder(template)
+        self.md_files_path = output_folder or 'docs/spec_files/'
+
         self.file_manager = FolderDigger(config_file_path)
         self.parser = MappingParser()
+        self._parse_repo(repo)
 
-    def __check_input_folder(self, input_folder):
-        '''check for the existence of the input folder, and ensure full path
+
+    def _parse_repo(self, repo = None):
+        '''parse an <ORG>/<REPO> into the full Github name, along with the
+           username and reponame, and github pages. This should be for where
+           the specification is to be published.
+
+           Parameters
+           ==========
+           repo: should correspond to the <ORG>/<REPONAME>
+        '''
+        if repo is None:
+            repo = 'openschemas/specifications'
+
+        username, reponame = repo.split('/')
+        self.repo = "https://www.github.com/%s" %(repo)
+        self.username = username
+        self.reponame = reponame
+        self.ghpages = "https://%s.github.io/%s" %(username, reponame)
+
+    def _check_input_folder(self, folder):
+        '''check for the existence of the input folder, ensure full path,
+           and return if exists. Exit if doesn't!
            
            Parameters
            ==========
            input_folder: path (relative or full) to input folder with specification
            subdirectories.
         '''
-        self.input_folder = os.path.abspath(input_folder)
-        if not os.path.exists(input_folder):
-            print('Cannot find %s' % input_folder)
+        folder = os.path.abspath(folder)
+        if not os.path.exists(folder):
+            print('Cannot find %s' % folder)
             sys.exit(1)
-        print('Found input folder %s' % input_folder)
+        print('Found folder %s' % folder)
+        return folder        
 
-    def __get_specs_list(self):
+    def _get_specs_list(self):
         '''return listing of specs, meaning loaded workbooks. The workbooks should
            already be validated by the file manager, and so we don't do it here.
            Each entry in the specs_list is a dictionary that includes paths to:
@@ -48,15 +92,18 @@ class FrontMatterParser:
         all_specs = dict()
 
         for name, params in self.specs_list.items():
-
             self.parser.set_metadata(params)
             all_specs[name] = self.parser.get_mapping()
 
         return all_specs
 
-    def __get_specification_post(self, spec_dict, skip_fields=None):
-        '''for a spec_workbook, which is a dictionary with "name" "workbook" and "params"
-           derive the post material, an html file that is mostly yaml metadata
+    def _get_specification_post(self, 
+                                spec_dict, 
+                                skip_fields=None,
+                                info_fields=None,
+                                info_key='spec_info'):
+        '''from a spec_dict, derive the post material, a dictionary that
+           will be converted to yaml.
  
            Parameters
            ==========
@@ -64,25 +111,48 @@ class FrontMatterParser:
                name: the name of the folder (and Specification)
                workbook: the loaded workbook (or file to it)
                params: the original values in the configuration.yml for the folder
+           skip_fields: don't include subset of fields (list)
+           info_fields: fields to add to "spec_info" (info_key)
+           info_key: key to use for info_fields into metadata
         '''
-        spec_metadata = {}
-        spec_post = frontmatter.Post('')
+        metadata = {}
+        post = frontmatter.Post('')
+        name = spec_dict['name']
+        info = {}
 
         # Skip over set of pre-defined fields
         if not skip_fields:
             skip_fields = []
 
-        if not isinstance(skip_fields,list):
+        if not info_fields:
+            info_fields = ['description',
+                           'full_example',
+                           'offical_type'
+                           'subtitle',
+                           'title',
+                           'version',
+                           'version_date']
+
+        # Fields specifically for openschemas template
+        metadata['redirect_from'] = "%s/%s" % (self.reponame, name)
+        info['full_example'] = "%s/tree/master/%s/examples/" % (self.repo, name)
+
+        if not isinstance(skip_fields, list):
             skip_fields = [skip_fields]
 
         for spec_field in spec_dict:
+
+            # Info gets added to the metadata at the end under info_key
+            if spec_field in info_fields:
+                info[spec_field] = spec_dict[spec_field]
             if spec_field not in skip_fields:
-                spec_metadata[spec_field] = spec_dict[spec_field]
+                metadata[spec_field] = spec_dict[spec_field]
 
-        spec_post.metadata = spec_metadata
-        return spec_post
+        metadata[info_key] = info
+        post.metadata = metadata
+        return post
 
-    def __create_spec_folder_struct(self, spec_name):
+    def _create_spec_folder_struct(self, spec_name):
         '''create a spec folder and subdirectory for examples for a 'spec_name'
            only if it doesn't exist.
 
@@ -110,19 +180,19 @@ class FrontMatterParser:
         # Either way, return the specification directory
         return spec_dir
 
-    def __write_README(self, spec_md_folder, spec_dict):
+    def _write_README(self, md_folder, spec_dict):
         '''write a README for a particular spec_md_folder
  
            Parameters
            ==========
-           spec_md_folder: a folder where a specification README should be written
+           md_folder: a folder where a specification README should be written
            spec_dict: a dictionary with:
                name: the name of the folder (and Specification)
                workbook: the loaded workbook (or file to it)
                params: the original values in the configuration.yml for the folder
         '''
-        spec_md_file_path = os.path.join(spec_md_folder, 'README.md')
-        with open(spec_md_file_path, "w") as readme:
+        md_file_path = os.path.join(md_folder, 'README.md')
+        with open(md_file_path, "w") as readme:
  
             # Look up some fields
             name = spec_dict['name']
@@ -145,43 +215,48 @@ class FrontMatterParser:
             readme.write("\n# Description \n")
             readme.write("%s \n" % description)
             readme.write("# Links \n")
-            readme.write("- [Specification](http://openschemas.github.io/specifications/%s/)\n" % name)
-            readme.write("- [Specification source](specification.html)\n")
-            readme.write("- [Coding Examples](%s)\n" % spec_dict['gh_examples'])
+            readme.write("- [Specification](%s/%s/)\n" % (self.ghpages, name))
+            readme.write("- [Specification source](%s.html)\n" % name)
+            readme.write("- [Coding Examples](%s/tree/master/examples)\n" % spec_dict['gh_folder'])
             readme.write("- [GitHUb Issues](%s)\n" % spec_dict['gh_tasks'])
             readme.write("> These files were generated using [map2model](https://github.com/openschemas/map2model) Python Module.")
         
     def parse_front_matter(self):
-
+        '''the primary function to parse the provided front matter, the tsv
+           files, and generate yml specifications from the templates
+        '''
+ 
         # Dictionary of the entries in configuration.yml with folder name as index
         self.specs_list = self.file_manager.get_specification_list(self.input_folder)
-        all_specs = self.__get_specs_list()
+        all_specs = self._get_specs_list()
 
         for spec_name, spec_dict in all_specs.items():
 
             # Create frontmatter post object with basic metadata
-            temp_spec_post = self.__get_specification_post(spec_dict)
-
-            if spec_dict['spec_type'] == 'Type':
-                temp_spec_post.metadata['layout'] = 'new_type_detail'
-            else:
-                temp_spec_post.metadata['layout'] = 'new_spec_detail'
+            post = self._get_specification_post(spec_dict)
 
             md_fm_bytes = BytesIO()
-            temp_spec_post.metadata['version'] = str(temp_spec_post.metadata['version'])
-            frontmatter.dump(temp_spec_post, md_fm_bytes)
-            spec_name = temp_spec_post.metadata['name']
+            post.metadata['version'] = str(post.metadata['version'])
+            frontmatter.dump(post, md_fm_bytes)
+            spec_name = post.metadata['name']
+            content =  str(md_fm_bytes.getvalue(), 'utf-8')
 
             # Create folder structure (examples) and README.md
-            spec_dir = self.__create_spec_folder_struct(spec_name)
-            self.__write_README(spec_dir, spec_dict)
+            spec_dir = self._create_spec_folder_struct(spec_name)
+            self._write_README(spec_dir, spec_dict)
+            
+            # Write the final markdown frontmatter to <NAME>.html from template.html            
+            with open('%s/templates/template.html' % here, 'r') as tfile:
+                template = tfile.read()
+            template.replace('{{MAP2SPEC_FRONTEND_MATTER}}', content)
 
-            # Write the final markdown frontmatter to specification.html
-            with open(os.path.join(spec_dir, 'specification.html'), 'w') as outfile:
-                temp_str = str(md_fm_bytes.getvalue(),'utf-8')
-                outfile.write(temp_str)
-                outfile.close()
+            # Write as output a yml and html file
+            output_name =  os.path.join(spec_dir, '%s' % spec_name)
+            with open('%s.yml' % output_name, 'w') as outfile:
+                outfile.write(template)
+            with open('%s.html' % output_name, 'w') as outfile:
+                outfile.write(content)
 
-            print ('%s MarkDown file generated.' % temp_spec_post.metadata['name'])
+            print('%s MarkDown file generated.' % post.metadata['name'])
 
         print('Generation Process Complete. Output files are in %s' % self.md_files_path)
