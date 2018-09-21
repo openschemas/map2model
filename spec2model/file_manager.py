@@ -8,9 +8,9 @@ class FolderDigger:
 
     yml_config = ''
 
-    def __init__(self, config_file_path='%s/configuration.yml' % here):
+    def __init__(self, config_file_path = None):
         self.specs_list = {}
-        self.config_file_path = config_file_path
+        self.config_file_path = config_file_path or '%s/configuration.yml' %here
         self.yml_config = yml_manager.YamlIO()
        
     def get_specs(self, spec_config, input_folder):
