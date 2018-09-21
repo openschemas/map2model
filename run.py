@@ -24,6 +24,10 @@ def get_parser():
                          help='template for openschemas.github.io. Should not need change.', 
                          type=str, default=None)
 
+    parser.add_argument("--repo", dest='repo', 
+                         help='final repo intended for specifications.', 
+                         type=str, default='openschemas/specifications')
+
     return parser
 
 
@@ -49,7 +53,6 @@ def main():
     folder = os.path.abspath(folder)
 
     config = args.config or 'spec2model/configuration.yml'
-    template = args.template
         
     # Output folder we may need to make
     if not os.path.exists(outfolder):
@@ -57,7 +60,7 @@ def main():
 
     print('Configuration file set to %s' % config)
     print('Output folder set to %s' % outfolder)
-    print('Input folder set to %s' % folder)
+    print('Input folder set to %s\n' % folder)
 
     # Both must exist
     for path in [config, folder]:
@@ -68,7 +71,8 @@ def main():
     spec_parser = md_parser.FrontMatterParser(input_folder=folder,
                                               output_folder=outfolder,
                                               config_file_path=config,
-                                              template=template)
+                                              template=args.template,
+                                              repo=args.repo)
     spec_parser.parse_front_matter()
     
 
