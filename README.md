@@ -154,7 +154,7 @@ is provided in [run.py](run.py)
 from openschemas.main.map2model import main
 
 # Here is an example to run the parser in python
-spec_parser = main(config='specifications/configuration.yml',
+spec_parser = main(config_yml='specifications/configuration.yml',
                    output='docs/spec_files',
                    folder='specifications')
 ```
